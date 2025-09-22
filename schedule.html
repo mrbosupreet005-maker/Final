@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Calendar - AyurSutra</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container container-xl">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>AyurSutra</h1>
+                    <p>Panchakarma Care</p>
+                </div>
+            </a>
+            <ul class="nav-menu" id="mobile-menu">
+                <li><a href="index.html" class="nav-item">Home</a></li>
+                <li><a href="patient-dashboard.html" class="nav-item">Patient Dashboard</a></li>
+                <li><a href="practitioner-dashboard.html" class="nav-item">Practitioner Dashboard</a></li>
+                <li><a href="schedule.html" class="nav-item active">Schedule</a></li>
+                <li><a href="progress.html" class="nav-item">Progress</a></li>
+                <li><a href="notifications.html" class="nav-item">Notifications</a></li>
+                <li><a href="feedback.html" class="nav-item">Feedback</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container-xl">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Therapy Schedule</h1>
+                <p class="dashboard-subtitle">Manage appointments and therapy sessions</p>
+                <div class="schedule-actions">
+                    <button class="btn btn-primary" onclick="openNewTab('patient-dashboard.html')">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.9.37 4.13 1.02"/>
+                        </svg>
+                        View Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="openNewTab('progress.html')">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M3 3v18h18"/>
+                            <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                        </svg>
+                        View Progress
+                    </button>
+                    <button class="btn btn-outline" onclick="showBookingModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 2v4"/>
+                            <path d="M16 2v4"/>
+                            <rect width="18" height="18" x="3" y="4" rx="2"/>
+                            <path d="M3 10h18"/>
+                        </svg>
+                        Book Session
+                    </button>
+                    <button class="btn btn-success" onclick="showAddSessionModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 5v14"/>
+                            <path d="M5 12h14"/>
+                        </svg>
+                        Add Session
+                    </button>
+                    <button class="btn btn-warning" onclick="showWellnessModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.9.37 4.13 1.02"/>
+                        </svg>
+                        Log Wellness
+                    </button>
+                    <button class="btn btn-info" onclick="showSymptomsModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Update Symptoms
+                    </button>
+                    <button class="btn btn-accent" onclick="shareProgress()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <polyline points="16,6 12,2 8,6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        Share Progress
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 2v4"/>
+                            <path d="M16 2v4"/>
+                            <rect width="18" height="18" x="3" y="4" rx="2"/>
+                            <path d="M3 10h18"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="upcoming-sessions-count">0</h3>
+                        <p>Upcoming Sessions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.9.37 4.13 1.02"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="completed-sessions-count">0</h3>
+                        <p>Completed Sessions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="average-rating">0.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2>Weekly Schedule</h2>
+                    <div class="calendar-controls">
+                        <button class="btn btn-outline btn-sm" onclick="navigateCalendar('prev')">
+                            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                            Previous
+                        </button>
+                        <span id="current-week">Current Week</span>
+                        <button class="btn btn-outline btn-sm" onclick="navigateCalendar('next')">
+                            Next
+                            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Calendar days will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Recent Sessions -->
+            <div class="recent-sessions">
+                <h2>Recent Sessions</h2>
+                <div class="sessions-list" id="recent-sessions-list">
+                    <!-- Sessions will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Book New Session</h2>
+                <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="practitioner-select">Practitioner</label>
+                        <select id="practitioner-select" required>
+                            <option value="">Select Practitioner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="treatment-select">Treatment Type</label>
+                        <select id="treatment-select" required>
+                            <option value="">Select Treatment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="session-date">Date</label>
+                        <input type="date" id="session-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="session-time">Time</label>
+                        <select id="session-time" required>
+                            <option value="">Select Time</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="session-notes">Notes (Optional)</label>
+                        <textarea id="session-notes" rows="3" placeholder="Any special requirements or notes..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeBookingModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Book Session</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rate Your Session</h2>
+                <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="review-form">
+                    <input type="hidden" id="review-session-id">
+                    
+                    <div class="rating-section">
+                        <h3>Overall Rating</h3>
+                        <div class="star-rating" id="overall-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <div class="rating-section">
+                        <h3>Treatment Quality</h3>
+                        <div class="star-rating" id="treatment-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <div class="rating-section">
+                        <h3>Practitioner</h3>
+                        <div class="star-rating" id="practitioner-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <div class="rating-section">
+                        <h3>Facility</h3>
+                        <div class="star-rating" id="facility-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-title">Review Title (Optional)</label>
+                        <input type="text" id="review-title" placeholder="Brief title for your review">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-comment">Comments</label>
+                        <textarea id="review-comment" rows="4" placeholder="Share your experience..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="anonymous-review">
+                            Submit anonymously
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Details Modal -->
+    <div id="session-details-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Session Details</h2>
+                <button class="modal-close" onclick="closeSessionDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="session-details-content">
+                    <!-- Session details will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeSessionDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="schedule.js"></script>
+</body>
+</html>

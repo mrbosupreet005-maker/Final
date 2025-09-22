@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practitioner Dashboard - AyurSutra</title>
+    <meta name="description" content="Manage therapy schedules and monitor patient progress">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container container-xl">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                        <path d="M8.5 8.5v.01"/>
+                        <path d="M16 15.5v.01"/>
+                        <path d="M12 12v.01"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>AyurSutra</h1>
+                    <p>Panchakarma Care</p>
+                </div>
+            </a>
+
+            <ul class="nav-menu" id="mobile-menu">
+                <li><a href="index.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    </svg>
+                    Home
+                </a></li>
+                <li><a href="patient-dashboard.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Patient Dashboard
+                </a></li>
+                <li><a href="practitioner-dashboard.html" class="nav-item active">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="m22 2-5 10-5-10 5-2 5 2"/>
+                    </svg>
+                    Practitioner Dashboard
+                </a></li>
+                <li><a href="schedule.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                        <line x1="16" x2="16" y1="2" y2="6"/>
+                        <line x1="8" x2="8" y1="2" y2="6"/>
+                        <line x1="3" x2="21" y1="10" y2="10"/>
+                    </svg>
+                    Schedule
+                </a></li>
+                <li><a href="progress.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                    </svg>
+                    Progress
+                </a></li>
+                <li><a href="notifications.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    Notifications
+                </a></li>
+                <li><a href="feedback.html" class="nav-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Feedback
+                </a></li>
+            </ul>
+
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container-xl">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h1 class="dashboard-title">Good morning, Dr. Priya</h1>
+                        <p class="dashboard-subtitle">You have 8 sessions today with 6 patients</p>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                        <!-- Search Input -->
+                        <div style="position: relative; min-width: 200px;">
+                            <input type="text" id="patient-search-input" placeholder="Search patients..." 
+                                   style="padding: 0.5rem 2.5rem 0.5rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--foreground); width: 100%;"
+                                   oninput="searchPatients(this.value)" onfocus="showSearchResults()" onblur="hideSearchResults()">
+                            <svg class="icon" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--muted-foreground);" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                            </svg>
+                            <!-- Search Results Dropdown -->
+                            <div id="search-results" style="position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-elevated); z-index: 1000; display: none; max-height: 200px; overflow-y: auto;">
+                                <!-- Search results will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Sort Dropdown -->
+                        <select id="sort-patients" onchange="sortPatients(this.value)" 
+                                style="padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--foreground); min-width: 150px;">
+                            <option value="">Sort by...</option>
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="age-asc">Age (Young to Old)</option>
+                            <option value="age-desc">Age (Old to Young)</option>
+                            <option value="sessions-asc">Sessions (Low to High)</option>
+                            <option value="sessions-desc">Sessions (High to Low)</option>
+                            <option value="popular">Most Popular</option>
+                            <option value="trending">Trending</option>
+                            <option value="newest">New to Old</option>
+                            <option value="oldest">Old to New</option>
+                        </select>
+                        
+                        <button class="btn btn-success" onclick="showAddSessionModal()">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M12 5v14"/>
+                                <path d="M5 12h14"/>
+                            </svg>
+                            Add Session
+                        </button>
+                        <button class="btn btn-outline" onclick="openNewTab('schedule.html')">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                            View Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 grid-cols-1">
+                <!-- Main Content -->
+                <div style="grid-column: span 2;" class="space-y-6">
+                    <!-- Today's Schedule -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg class="icon text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                            <line x1="16" x2="16" y1="2" y2="6"/>
+                                            <line x1="8" x2="8" y1="2" y2="6"/>
+                                            <line x1="3" x2="21" y1="10" y2="10"/>
+                                        </svg>
+                                        Today's Schedule
+                                    </h2>
+                                    <p class="card-description">December 15, 2024 • 8 sessions scheduled</p>
+                                </div>
+                                <div style="position: relative;">
+                                    <button class="btn btn-outline btn-sm" onclick="toggleFilterDropdown()">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3"/>
+                                        </svg>
+                                        Filter
+                                        <span id="filter-count" style="margin-left: 0.5rem; background: var(--primary); color: var(--primary-foreground); border-radius: 50%; padding: 0.125rem 0.375rem; font-size: 0.75rem; display: none;">0</span>
+                                    </button>
+                                    
+                                    <!-- Filter Dropdown -->
+                                    <div id="filter-dropdown" style="position: absolute; top: 100%; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-elevated); z-index: 1000; display: none; min-width: 280px; padding: 1rem;">
+                                        <div style="margin-bottom: 1rem;">
+                                            <h4 style="margin: 0 0 0.75rem 0; color: var(--foreground); font-size: 1rem; font-weight: 600;">Filter Sessions</h4>
+                                            
+                                            <!-- Status Filter -->
+                                            <div style="margin-bottom: 1rem;">
+                                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--foreground);">Session Status</label>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-confirmed" value="confirmed" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Confirmed</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-in-progress" value="in-progress" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">In Progress</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-pending" value="pending" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Pending</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-completed" value="completed" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Completed</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Time Filter -->
+                                            <div style="margin-bottom: 1rem;">
+                                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--foreground);">Time Range</label>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-morning" value="morning" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Morning (6AM-12PM)</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-afternoon" value="afternoon" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Afternoon (12PM-6PM)</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-evening" value="evening" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Evening (6PM-10PM)</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Duration Filter -->
+                                            <div style="margin-bottom: 1rem;">
+                                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--foreground);">Duration</label>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-short" value="short" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Short (30-45 min)</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-medium" value="medium" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Medium (60-90 min)</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-long" value="long" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Long (90+ min)</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Treatment Type Filter -->
+                                            <div style="margin-bottom: 1rem;">
+                                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--foreground);">Treatment Type</label>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-massage" value="massage" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Massage</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-yoga" value="yoga" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Yoga</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-consultation" value="consultation" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Consultation</span>
+                                                    </label>
+                                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                                        <input type="checkbox" id="filter-panchakarma" value="panchakarma" onchange="applyFilters()">
+                                                        <span style="font-size: 0.875rem;">Panchakarma</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Filter Actions -->
+                                        <div style="display: flex; gap: 0.5rem; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 1rem;">
+                                            <button class="btn btn-outline btn-sm" onclick="clearAllFilters()" style="flex: 1;">
+                                                Clear All
+                                            </button>
+                                            <button class="btn btn-primary btn-sm" onclick="toggleFilterDropdown()" style="flex: 1;">
+                                                Apply Filters
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div id="patient-sessions-container" class="space-y-4">
+                                <!-- Session 1 -->
+                                <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                                <div class="text-lg font-semibold text-primary">09:00 AM</div>
+                                                <span class="badge badge-success">confirmed</span>
+                                                <span style="font-size: 0.875rem; color: var(--muted-foreground);">(90 min)</span>
+                                            </div>
+                                            <h3 class="font-semibold mb-2">Sarah Johnson</h3>
+                                            <p class="font-medium mb-2" style="color: var(--accent);">Abhyanga</p>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground);">First session, needs orientation</p>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn btn-outline btn-sm" onclick="viewSessionDetails(1)">View Details</button>
+                                            <button class="btn btn-healing btn-sm" onclick="startSession(1)">Start Session</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Session 2 -->
+                                <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                                <div class="text-lg font-semibold text-primary">11:00 AM</div>
+                                                <span class="badge" style="background-color: var(--accent); color: var(--accent-foreground);">in-progress</span>
+                                                <span style="font-size: 0.875rem; color: var(--muted-foreground);">(60 min)</span>
+                                            </div>
+                                            <h3 class="font-semibold mb-2">Michael Chen</h3>
+                                            <p class="font-medium mb-2" style="color: var(--accent);">Shirodhara</p>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground);">Week 2, showing good progress</p>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn btn-outline btn-sm" onclick="viewSessionDetails(2)">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Session 3 -->
+                                <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                                <div class="text-lg font-semibold text-primary">02:00 PM</div>
+                                                <span class="badge badge-warning">pending</span>
+                                                <span style="font-size: 0.875rem; color: var(--muted-foreground);">(120 min)</span>
+                                            </div>
+                                            <h3 class="font-semibold mb-2">Emma Davis</h3>
+                                            <p class="font-medium mb-2" style="color: var(--accent);">Panchakarma Full</p>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground);">Consultation required</p>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn btn-outline btn-sm" onclick="viewSessionDetails(3)">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Progress Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <svg class="icon text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                                </svg>
+                                Patient Progress Overview
+                            </h2>
+                            <p class="card-description">Track your patients' wellness journey</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="space-y-4">
+                                <!-- Patient 1 -->
+                                <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <h3 class="font-semibold">Sarah Johnson</h3>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground);">Abhyanga Program</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div class="text-success" style="font-size: 0.875rem; font-weight: 500;">Excellent</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">9/12 sessions</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 0.75rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                            <span style="font-size: 0.875rem; font-weight: 500;">Progress</span>
+                                            <span style="font-size: 0.875rem; color: var(--muted-foreground);">75%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: start; gap: 0.5rem; font-size: 0.875rem;">
+                                        <svg class="icon-sm text-muted" style="margin-top: 0.125rem; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                        </svg>
+                                        <div>
+                                            <p style="color: var(--muted-foreground); font-style: italic;">"Feeling much more energized and relaxed"</p>
+                                            <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem;">Last update: 2 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Patient 2 -->
+                                <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <h3 class="font-semibold">Michael Chen</h3>
+                                            <p style="font-size: 0.875rem; color: var(--muted-foreground);">Stress Relief Program</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div class="text-primary" style="font-size: 0.875rem; font-weight: 500;">Good</div>
+                                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">6/10 sessions</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 0.75rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                            <span style="font-size: 0.875rem; font-weight: 500;">Progress</span>
+                                            <span style="font-size: 0.875rem; color: var(--muted-foreground);">60%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: start; gap: 0.5rem; font-size: 0.875rem;">
+                                        <svg class="icon-sm text-muted" style="margin-top: 0.125rem; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                        </svg>
+                                        <div>
+                                            <p style="color: var(--muted-foreground); font-style: italic;">"Sleep quality has improved significantly"</p>
+                                            <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem;">Last update: 1 day ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Today's Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <svg class="icon text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                                </svg>
+                                Today's Overview
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="space-y-4">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg class="icon-sm text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                        </svg>
+                                        <span style="font-size: 0.875rem;">Patients Today</span>
+                                    </div>
+                                    <div class="text-lg font-semibold text-primary">6</div>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg class="icon-sm" style="color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12,6 12,12 16,14"/>
+                                        </svg>
+                                        <span style="font-size: 0.875rem;">Total Hours</span>
+                                    </div>
+                                    <div class="text-lg font-semibold" style="color: var(--accent);">8.5</div>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg class="icon-sm text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                                            <path d="m9 12 2 2 4-4"/>
+                                        </svg>
+                                        <span style="font-size: 0.875rem;">Completed</span>
+                                    </div>
+                                    <div class="text-lg font-semibold text-success">2</div>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg class="icon-sm text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <polygon points="12,2 22,20 2,20"/>
+                                        </svg>
+                                        <span style="font-size: 0.875rem;">Avg Rating</span>
+                                    </div>
+                                    <div class="text-lg font-semibold text-warning">4.9</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts & Notifications -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <svg class="icon" style="color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                    <path d="M12 9v4"/>
+                                    <path d="M12 17h.01"/>
+                                </svg>
+                                Alerts
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="space-y-3">
+                                <!-- Alert 1 -->
+                                <div style="padding: 0.75rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                                    <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                        <svg class="icon-sm" style="color: var(--destructive); margin-top: 0.125rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                            <path d="M12 9v4"/>
+                                            <path d="M12 17h.01"/>
+                                        </svg>
+                                        <div style="flex: 1; min-width: 0;">
+                                            <p style="font-size: 0.875rem;">Patient John Smith missed appointment</p>
+                                            <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem;">30 min ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alert 2 -->
+                                <div style="padding: 0.75rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                                    <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                        <svg class="icon-sm text-primary" style="margin-top: 0.125rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                        </svg>
+                                        <div style="flex: 1; min-width: 0;">
+                                            <p style="font-size: 0.875rem;">New feedback from Sarah Johnson</p>
+                                            <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem;">2 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alert 3 -->
+                                <div style="padding: 0.75rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                                    <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                        <svg class="icon-sm" style="color: var(--accent); margin-top: 0.125rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                            <line x1="16" x2="16" y1="2" y2="6"/>
+                                            <line x1="8" x2="8" y1="2" y2="6"/>
+                                            <line x1="3" x2="21" y1="10" y2="10"/>
+                                        </svg>
+                                        <div style="flex: 1; min-width: 0;">
+                                            <p style="font-size: 0.875rem;">Tomorrow's schedule updated</p>
+                                            <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem;">4 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline btn-sm" style="width: 100%; margin-top: 1rem;" onclick="window.location.href='notifications.html'">
+                                View All Alerts
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Session Modal -->
+    <div id="add-session-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Session</h2>
+                <button class="modal-close" onclick="closeAddSessionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-session-form">
+                    <div class="form-group">
+                        <label for="add-patient-select">Patient</label>
+                        <select id="add-patient-select" required>
+                            <option value="">Select Patient</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-treatment-select">Treatment Type</label>
+                        <select id="add-treatment-select" required>
+                            <option value="">Select Treatment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-session-date">Date</label>
+                        <input type="date" id="add-session-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-session-time">Time</label>
+                        <input type="time" id="add-session-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-session-duration">Duration (minutes)</label>
+                        <input type="number" id="add-session-duration" min="15" max="180" value="60" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-session-notes">Notes (Optional)</label>
+                        <textarea id="add-session-notes" rows="3" placeholder="Session notes or special instructions..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeAddSessionModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Session</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="schedule.js"></script>
+    <script>
+        // Practitioner Dashboard specific functions
+        function openNewTab(url) {
+            window.open(url, '_blank');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Patient data for search and sort
+        const patientData = [
+            { id: 1, name: 'Sarah Johnson', age: 32, phone: '+1 (555) 123-4567', sessions: 12, lastVisit: '2024-01-15', status: 'active', popularity: 95, trending: true },
+            { id: 2, name: 'Michael Chen', age: 45, phone: '+1 (555) 234-5678', sessions: 8, lastVisit: '2024-01-14', status: 'active', popularity: 88, trending: false },
+            { id: 3, name: 'Emma Davis', age: 28, phone: '+1 (555) 345-6789', sessions: 15, lastVisit: '2024-01-13', status: 'active', popularity: 92, trending: true },
+            { id: 4, name: 'John Smith', age: 55, phone: '+1 (555) 456-7890', sessions: 6, lastVisit: '2024-01-12', status: 'active', popularity: 75, trending: false },
+            { id: 5, name: 'Lisa Wilson', age: 38, phone: '+1 (555) 567-8901', sessions: 10, lastVisit: '2024-01-11', status: 'active', popularity: 85, trending: true },
+            { id: 6, name: 'David Brown', age: 42, phone: '+1 (555) 678-9012', sessions: 4, lastVisit: '2024-01-10', status: 'active', popularity: 70, trending: false }
+        ];
+
+        let filteredPatients = [...patientData];
+        let currentSort = '';
+
+        function searchPatients(query) {
+            console.log('Searching patients:', query);
+            
+            if (!query || query.trim() === '') {
+                filteredPatients = [...patientData];
+            } else {
+                const searchTerm = query.toLowerCase().trim();
+                filteredPatients = patientData.filter(patient => 
+                    patient.name.toLowerCase().includes(searchTerm) ||
+                    patient.phone.includes(searchTerm) ||
+                    patient.age.toString().includes(searchTerm)
+                );
+            }
+            
+            // Apply current sort if any
+            if (currentSort) {
+                sortPatients(currentSort, false);
+            } else {
+                displayPatients();
+            }
+            
+            // Show search results dropdown
+            showSearchResults();
+        }
+
+        function showSearchResults() {
+            const searchResults = document.getElementById('search-results');
+            const searchInput = document.getElementById('patient-search-input');
+            
+            if (searchResults && searchInput) {
+                if (searchInput.value.trim() === '') {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                searchResults.innerHTML = '';
+                
+                if (filteredPatients.length === 0) {
+                    searchResults.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--muted-foreground);">No patients found</div>';
+                } else {
+                    filteredPatients.slice(0, 5).forEach(patient => {
+                        const resultItem = document.createElement('div');
+                        resultItem.style.cssText = 'padding: 0.75rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background-color 0.2s;';
+                        resultItem.innerHTML = `
+                            <div style="font-weight: 600; color: var(--foreground);">${patient.name}</div>
+                            <div style="font-size: 0.875rem; color: var(--muted-foreground);">${patient.age} years • ${patient.phone}</div>
+                        `;
+                        resultItem.addEventListener('mouseenter', () => {
+                            resultItem.style.backgroundColor = 'var(--muted)';
+                        });
+                        resultItem.addEventListener('mouseleave', () => {
+                            resultItem.style.backgroundColor = 'transparent';
+                        });
+                        resultItem.addEventListener('click', () => {
+                            searchInput.value = patient.name;
+                            searchPatients(patient.name);
+                            hideSearchResults();
+                        });
+                        searchResults.appendChild(resultItem);
+                    });
+                }
+                
+                searchResults.style.display = 'block';
+            }
+        }
+
+        function hideSearchResults() {
+            // Delay hiding to allow clicking on results
+            setTimeout(() => {
+                const searchResults = document.getElementById('search-results');
+                if (searchResults) {
+                    searchResults.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        function sortPatients(sortType, updateDisplay = true) {
+            console.log('Sorting patients by:', sortType);
+            currentSort = sortType;
+            
+            if (!sortType) {
+                if (updateDisplay) displayPatients();
+                return;
+            }
+            
+            switch (sortType) {
+                case 'name-asc':
+                    filteredPatients.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-desc':
+                    filteredPatients.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                case 'age-asc':
+                    filteredPatients.sort((a, b) => a.age - b.age);
+                    break;
+                case 'age-desc':
+                    filteredPatients.sort((a, b) => b.age - a.age);
+                    break;
+                case 'sessions-asc':
+                    filteredPatients.sort((a, b) => a.sessions - b.sessions);
+                    break;
+                case 'sessions-desc':
+                    filteredPatients.sort((a, b) => b.sessions - a.sessions);
+                    break;
+                case 'popular':
+                    filteredPatients.sort((a, b) => b.popularity - a.popularity);
+                    break;
+                case 'trending':
+                    filteredPatients.sort((a, b) => {
+                        if (a.trending && !b.trending) return -1;
+                        if (!a.trending && b.trending) return 1;
+                        return b.popularity - a.popularity;
+                    });
+                    break;
+                case 'newest':
+                    filteredPatients.sort((a, b) => new Date(b.lastVisit) - new Date(a.lastVisit));
+                    break;
+                case 'oldest':
+                    filteredPatients.sort((a, b) => new Date(a.lastVisit) - new Date(b.lastVisit));
+                    break;
+            }
+            
+            if (updateDisplay) {
+                displayPatients();
+            }
+        }
+
+        function displayPatients() {
+            const container = document.getElementById('patient-sessions-container');
+            if (!container) return;
+            
+            // For now, just show a message about the search/sort results
+            // In a real implementation, this would update the patient cards
+            console.log('Displaying patients:', filteredPatients);
+            
+            // Show a notification about the current filter/sort
+            showMessage(`Showing ${filteredPatients.length} patients${currentSort ? ` sorted by ${getSortDisplayName(currentSort)}` : ''}`, 'success');
+        }
+
+        function getSortDisplayName(sortType) {
+            const sortNames = {
+                'name-asc': 'Name (A-Z)',
+                'name-desc': 'Name (Z-A)',
+                'age-asc': 'Age (Young to Old)',
+                'age-desc': 'Age (Old to Young)',
+                'sessions-asc': 'Sessions (Low to High)',
+                'sessions-desc': 'Sessions (High to Low)',
+                'popular': 'Most Popular',
+                'trending': 'Trending',
+                'newest': 'New to Old',
+                'oldest': 'Old to New'
+            };
+            return sortNames[sortType] || sortType;
+        }
+
+        // Add Session Modal Functions
+        function showAddSessionModal() {
+            console.log('showAddSessionModal called in Practitioner Dashboard');
+            const modal = document.getElementById('add-session-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                // Set minimum date to today
+                const dateInput = document.getElementById('add-session-date');
+                if (dateInput) {
+                    dateInput.min = new Date().toISOString().split('T')[0];
+                }
+                // Populate selects
+                populateAddSessionSelects();
+            } else {
+                console.error('Add session modal not found!');
+            }
+        }
+
+        function closeAddSessionModal() {
+            const modal = document.getElementById('add-session-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.getElementById('add-session-form').reset();
+            }
+        }
+
+        function populateAddSessionSelects() {
+            // Populate patients
+            const patientSelect = document.getElementById('add-patient-select');
+            if (patientSelect) {
+                patientSelect.innerHTML = '<option value="">Select Patient</option>';
+                // Add demo patients
+                const patients = [
+                    { id: 1, name: 'Sarah Johnson', age: 32, phone: '+1 (555) 123-4567' },
+                    { id: 2, name: 'John Smith', age: 45, phone: '+1 (555) 234-5678' },
+                    { id: 3, name: 'Emily Davis', age: 28, phone: '+1 (555) 345-6789' },
+                    { id: 4, name: 'Michael Brown', age: 55, phone: '+1 (555) 456-7890' },
+                    { id: 5, name: 'Lisa Wilson', age: 38, phone: '+1 (555) 567-8901' }
+                ];
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.name} (${patient.age} years) - ${patient.phone}`;
+                    option.setAttribute('data-age', patient.age);
+                    option.setAttribute('data-phone', patient.phone);
+                    patientSelect.appendChild(option);
+                });
+            }
+            
+            // Populate treatments
+            const treatmentSelect = document.getElementById('add-treatment-select');
+            if (treatmentSelect) {
+                treatmentSelect.innerHTML = '<option value="">Select Treatment</option>';
+                const treatments = [
+                    { id: 1, name: 'Ayurvedic Massage', duration: 60, price: 80, description: 'Full body therapeutic massage with herbal oils' },
+                    { id: 2, name: 'Yoga Therapy', duration: 45, price: 60, description: 'Personalized yoga session for healing and wellness' },
+                    { id: 3, name: 'Herbal Consultation', duration: 30, price: 40, description: 'Consultation with herbal remedies and lifestyle advice' },
+                    { id: 4, name: 'Meditation Session', duration: 30, price: 35, description: 'Guided meditation for stress relief and mental clarity' },
+                    { id: 5, name: 'Panchakarma Treatment', duration: 120, price: 150, description: 'Comprehensive detoxification and rejuvenation therapy' },
+                    { id: 6, name: 'Abhyanga Program', duration: 90, price: 100, description: 'Traditional oil massage therapy program' }
+                ];
+                treatments.forEach(treatment => {
+                    const option = document.createElement('option');
+                    option.value = treatment.id;
+                    option.textContent = `${treatment.name} - ${treatment.duration} min - $${treatment.price}`;
+                    option.setAttribute('data-duration', treatment.duration);
+                    option.setAttribute('data-price', treatment.price);
+                    option.setAttribute('data-description', treatment.description);
+                    treatmentSelect.appendChild(option);
+                });
+            }
+        }
+
+        function handleAddSessionSubmission(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const sessionData = {
+                patientId: formData.get('add-patient-select'),
+                treatmentId: formData.get('add-treatment-select'),
+                scheduledDate: formData.get('add-session-date'),
+                scheduledTime: formData.get('add-session-time'),
+                durationMinutes: parseInt(formData.get('add-session-duration')),
+                notes: formData.get('add-session-notes')
+            };
+            
+            // Get selected patient and treatment details
+            const patientSelect = document.getElementById('add-patient-select');
+            const treatmentSelect = document.getElementById('add-treatment-select');
+            const selectedPatient = patientSelect.options[patientSelect.selectedIndex];
+            const selectedTreatment = treatmentSelect.options[treatmentSelect.selectedIndex];
+            
+            // Save to localStorage
+            let sessions = JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]');
+            const newSession = {
+                id: Date.now(),
+                ...sessionData,
+                status: 'scheduled',
+                treatment_name: selectedTreatment.textContent.split(' - ')[0],
+                treatmentType: selectedTreatment.textContent.split(' - ')[0],
+                patientName: selectedPatient.textContent.split(' (')[0],
+                patientAge: selectedPatient.getAttribute('data-age') + ' years',
+                patientPhone: selectedPatient.getAttribute('data-phone'),
+                practitioner_first_name: 'Dr. Demo',
+                practitioner_last_name: 'Practitioner',
+                estimatedCost: selectedTreatment.getAttribute('data-price'),
+                created_at: new Date().toISOString()
+            };
+            sessions.push(newSession);
+            localStorage.setItem('ayursutra_sessions', JSON.stringify(sessions));
+            
+            showMessage('Session added successfully!', 'success');
+            closeAddSessionModal();
+        }
+
+        function showMessage(message, type) {
+            // Remove existing messages
+            const existingMessages = document.querySelectorAll('.message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Filter functionality
+        let activeFilters = {
+            status: [],
+            timeRange: [],
+            duration: [],
+            treatmentType: []
+        };
+
+        function toggleFilterDropdown() {
+            const dropdown = document.getElementById('filter-dropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        function applyFilters() {
+            // Get all checked filter options
+            const statusFilters = Array.from(document.querySelectorAll('input[id^="filter-"][value="confirmed"], input[id^="filter-"][value="in-progress"], input[id^="filter-"][value="pending"], input[id^="filter-"][value="completed"]:checked')).map(cb => cb.value);
+            const timeFilters = Array.from(document.querySelectorAll('input[id^="filter-"][value="morning"], input[id^="filter-"][value="afternoon"], input[id^="filter-"][value="evening"]:checked')).map(cb => cb.value);
+            const durationFilters = Array.from(document.querySelectorAll('input[id^="filter-"][value="short"], input[id^="filter-"][value="medium"], input[id^="filter-"][value="long"]:checked')).map(cb => cb.value);
+            const treatmentFilters = Array.from(document.querySelectorAll('input[id^="filter-"][value="massage"], input[id^="filter-"][value="yoga"], input[id^="filter-"][value="consultation"], input[id^="filter-"][value="panchakarma"]:checked')).map(cb => cb.value);
+
+            activeFilters = {
+                status: statusFilters,
+                timeRange: timeFilters,
+                duration: durationFilters,
+                treatmentType: treatmentFilters
+            };
+
+            // Update filter count badge
+            const totalFilters = statusFilters.length + timeFilters.length + durationFilters.length + treatmentFilters.length;
+            const filterCount = document.getElementById('filter-count');
+            if (filterCount) {
+                if (totalFilters > 0) {
+                    filterCount.textContent = totalFilters;
+                    filterCount.style.display = 'inline';
+                } else {
+                    filterCount.style.display = 'none';
+                }
+            }
+
+            // Apply filters to sessions
+            filterSessions();
+        }
+
+        function filterSessions() {
+            const container = document.getElementById('patient-sessions-container');
+            if (!container) return;
+
+            // Get all session cards
+            const sessionCards = container.querySelectorAll('div[style*="border: 1px solid var(--border)"]');
+            
+            let visibleCount = 0;
+            sessionCards.forEach(card => {
+                let shouldShow = true;
+                
+                // Check status filter
+                if (activeFilters.status.length > 0) {
+                    const statusBadge = card.querySelector('.badge');
+                    const sessionStatus = statusBadge ? statusBadge.textContent.toLowerCase().replace(' ', '-') : '';
+                    if (!activeFilters.status.includes(sessionStatus)) {
+                        shouldShow = false;
+                    }
+                }
+                
+                // Check time filter
+                if (activeFilters.timeRange.length > 0 && shouldShow) {
+                    const timeElement = card.querySelector('.text-lg.font-semibold.text-primary');
+                    if (timeElement) {
+                        const time = timeElement.textContent;
+                        const hour = parseInt(time.split(':')[0]);
+                        const period = time.includes('AM') ? 'AM' : 'PM';
+                        const hour24 = period === 'PM' && hour !== 12 ? hour + 12 : (period === 'AM' && hour === 12 ? 0 : hour);
+                        
+                        let timeMatches = false;
+                        if (activeFilters.timeRange.includes('morning') && hour24 >= 6 && hour24 < 12) timeMatches = true;
+                        if (activeFilters.timeRange.includes('afternoon') && hour24 >= 12 && hour24 < 18) timeMatches = true;
+                        if (activeFilters.timeRange.includes('evening') && hour24 >= 18 && hour24 < 22) timeMatches = true;
+                        
+                        if (!timeMatches) shouldShow = false;
+                    }
+                }
+                
+                // Check duration filter
+                if (activeFilters.duration.length > 0 && shouldShow) {
+                    const durationText = card.textContent;
+                    let durationMatches = false;
+                    
+                    if (activeFilters.duration.includes('short') && (durationText.includes('30') || durationText.includes('45'))) durationMatches = true;
+                    if (activeFilters.duration.includes('medium') && (durationText.includes('60') || durationText.includes('90'))) durationMatches = true;
+                    if (activeFilters.duration.includes('long') && (durationText.includes('120') || durationText.includes('150'))) durationMatches = true;
+                    
+                    if (!durationMatches) shouldShow = false;
+                }
+                
+                // Check treatment type filter
+                if (activeFilters.treatmentType.length > 0 && shouldShow) {
+                    const treatmentText = card.textContent.toLowerCase();
+                    let treatmentMatches = false;
+                    
+                    if (activeFilters.treatmentType.includes('massage') && (treatmentText.includes('abhyanga') || treatmentText.includes('massage'))) treatmentMatches = true;
+                    if (activeFilters.treatmentType.includes('yoga') && treatmentText.includes('yoga')) treatmentMatches = true;
+                    if (activeFilters.treatmentType.includes('consultation') && treatmentText.includes('consultation')) treatmentMatches = true;
+                    if (activeFilters.treatmentType.includes('panchakarma') && treatmentText.includes('panchakarma')) treatmentMatches = true;
+                    
+                    if (!treatmentMatches) shouldShow = false;
+                }
+                
+                // Show or hide the card
+                card.style.display = shouldShow ? 'block' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            // Show filter results message
+            const totalSessions = sessionCards.length;
+            if (totalFilters > 0) {
+                showMessage(`Showing ${visibleCount} of ${totalSessions} sessions (${totalFilters} filters applied)`, 'success');
+            } else {
+                showMessage(`Showing all ${totalSessions} sessions`, 'success');
+            }
+        }
+
+        function clearAllFilters() {
+            // Uncheck all filter checkboxes
+            const allCheckboxes = document.querySelectorAll('#filter-dropdown input[type="checkbox"]');
+            allCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Reset active filters
+            activeFilters = {
+                status: [],
+                timeRange: [],
+                duration: [],
+                treatmentType: []
+            };
+            
+            // Hide filter count badge
+            const filterCount = document.getElementById('filter-count');
+            if (filterCount) {
+                filterCount.style.display = 'none';
+            }
+            
+            // Show all sessions
+            const container = document.getElementById('patient-sessions-container');
+            if (container) {
+                const sessionCards = container.querySelectorAll('div[style*="border: 1px solid var(--border)"]');
+                sessionCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                showMessage(`Showing all ${sessionCards.length} sessions`, 'success');
+            }
+        }
+
+        // Close filter dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const filterDropdown = document.getElementById('filter-dropdown');
+            const filterButton = document.querySelector('button[onclick="toggleFilterDropdown()"]');
+            
+            if (filterDropdown && filterButton && 
+                !filterDropdown.contains(event.target) && 
+                !filterButton.contains(event.target)) {
+                filterDropdown.style.display = 'none';
+            }
+        });
+
+        // Make functions globally available
+        window.showAddSessionModal = showAddSessionModal;
+        window.closeAddSessionModal = closeAddSessionModal;
+        window.searchPatients = searchPatients;
+        window.sortPatients = sortPatients;
+        window.showSearchResults = showSearchResults;
+        window.hideSearchResults = hideSearchResults;
+        window.toggleFilterDropdown = toggleFilterDropdown;
+        window.applyFilters = applyFilters;
+        window.clearAllFilters = clearAllFilters;
+
+        // Initialize practitioner dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Practitioner Dashboard DOM loaded');
+            
+            // Set minimum date to today for adding sessions
+            const dateInput = document.getElementById('add-session-date');
+            if (dateInput) {
+                dateInput.min = new Date().toISOString().split('T')[0];
+            }
+
+            // Add form event listener
+            const addSessionForm = document.getElementById('add-session-form');
+            if (addSessionForm) {
+                addSessionForm.addEventListener('submit', handleAddSessionSubmission);
+                console.log('Add session form listener added');
+            }
+
+            // Test if modal exists
+            console.log('Add session modal exists:', !!document.getElementById('add-session-modal'));
+        });
+    </script>
+</body>
+</html>

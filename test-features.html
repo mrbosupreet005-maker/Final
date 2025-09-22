@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Features - AyurSutra</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="container-xl">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Test All Features</h1>
+                <p class="dashboard-subtitle">Click the buttons below to test all functionality</p>
+                
+                <div class="schedule-actions">
+                    <button class="btn btn-success" onclick="showAddSessionModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 5v14"/>
+                            <path d="M5 12h14"/>
+                        </svg>
+                        Test Add Session
+                    </button>
+                    <button class="btn btn-warning" onclick="showWellnessModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.9.37 4.13 1.02"/>
+                        </svg>
+                        Test Log Wellness
+                    </button>
+                    <button class="btn btn-info" onclick="showSymptomsModal()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Test Update Symptoms
+                    </button>
+                    <button class="btn btn-accent" onclick="shareProgress()">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <polyline points="16,6 12,2 8,6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        Test Share Progress
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <h3 id="upcoming-sessions-count">0</h3>
+                        <p>Upcoming Sessions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3 id="completed-sessions-count">0</h3>
+                        <p>Completed Sessions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-content">
+                        <h3 id="average-rating">0.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2>Test Calendar</h2>
+                    <div class="calendar-controls">
+                        <button class="btn btn-outline" onclick="navigateCalendar('prev')">← Previous</button>
+                        <span id="current-week">Loading...</span>
+                        <button class="btn btn-outline" onclick="navigateCalendar('next')">Next →</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+
+            <div class="recent-sessions">
+                <h2>Test Sessions</h2>
+                <div class="sessions-list" id="recent-sessions-list">
+                    <!-- Sessions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="api.js"></script>
+    <script src="schedule.js"></script>
+    
+    <script>
+        // Test all features on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Testing all features...');
+            
+            // Test localStorage
+            console.log('localStorage available:', typeof(Storage) !== "undefined");
+            
+            // Test API object
+            console.log('API object available:', typeof(api) !== "undefined");
+            
+            // Test functions
+            console.log('addNewSession function:', typeof(addNewSession) !== "undefined");
+            console.log('logTodaysWellness function:', typeof(logTodaysWellness) !== "undefined");
+            console.log('updateSymptoms function:', typeof(updateSymptoms) !== "undefined");
+            console.log('shareProgress function:', typeof(shareProgress) !== "undefined");
+            
+            // Load demo data
+            loadDemoData();
+            
+            console.log('All features loaded successfully!');
+        });
+    </script>
+</body>
+</html>

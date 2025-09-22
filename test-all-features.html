@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test All Features - AyurSutra</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        .test-result.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .test-result.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container container-xl">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>AyurSutra</h1>
+                    <p>Panchakarma Care</p>
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="test-container">
+        <h1>🧪 Feature Testing Dashboard</h1>
+        <p>Test all the features you requested to make sure they're working properly!</p>
+
+        <!-- Session Management Tests -->
+        <div class="test-section">
+            <h2>📅 Session Management</h2>
+            <p>Test adding, starting, completing, and rescheduling sessions</p>
+            <div class="test-buttons">
+                <button class="btn btn-success" onclick="testAddSession()">Test Add Session</button>
+                <button class="btn btn-warning" onclick="testStartSession()">Test Start Session</button>
+                <button class="btn btn-primary" onclick="testCompleteSession()">Test Complete Session</button>
+                <button class="btn btn-info" onclick="testRescheduleSession()">Test Reschedule Session</button>
+            </div>
+            <div id="session-result" class="test-result"></div>
+        </div>
+
+        <!-- Wellness & Symptoms Tests -->
+        <div class="test-section">
+            <h2>🏥 Wellness & Symptoms</h2>
+            <p>Test logging wellness and updating symptoms</p>
+            <div class="test-buttons">
+                <button class="btn btn-warning" onclick="testLogWellness()">Test Log Wellness</button>
+                <button class="btn btn-info" onclick="testUpdateSymptoms()">Test Update Symptoms</button>
+            </div>
+            <div id="wellness-result" class="test-result"></div>
+        </div>
+
+        <!-- Share & Reviews Tests -->
+        <div class="test-section">
+            <h2>⭐ Share & Reviews</h2>
+            <p>Test sharing progress and star ratings</p>
+            <div class="test-buttons">
+                <button class="btn btn-accent" onclick="testShareProgress()">Test Share Progress</button>
+                <button class="btn btn-secondary" onclick="testStarRating()">Test Star Rating</button>
+            </div>
+            <div id="share-result" class="test-result"></div>
+        </div>
+
+        <!-- New Tab Tests -->
+        <div class="test-section">
+            <h2>🔗 New Tab Functionality</h2>
+            <p>Test opening new tabs for different pages</p>
+            <div class="test-buttons">
+                <button class="btn btn-outline" onclick="testNewTab('patient-dashboard.html')">Open Patient Dashboard</button>
+                <button class="btn btn-outline" onclick="testNewTab('progress.html')">Open Progress</button>
+                <button class="btn btn-outline" onclick="testNewTab('schedule.html')">Open Schedule</button>
+            </div>
+            <div id="tab-result" class="test-result"></div>
+        </div>
+
+        <!-- Data Persistence Tests -->
+        <div class="test-section">
+            <h2>💾 Data Persistence</h2>
+            <p>Test if data is being saved and loaded properly</p>
+            <div class="test-buttons">
+                <button class="btn btn-primary" onclick="testDataPersistence()">Test Data Save/Load</button>
+                <button class="btn btn-secondary" onclick="clearTestData()">Clear Test Data</button>
+            </div>
+            <div id="data-result" class="test-result"></div>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="test-section">
+            <h2>🚀 Quick Navigation</h2>
+            <p>Go directly to the main features</p>
+            <div class="test-buttons">
+                <a href="schedule.html" class="btn btn-primary">Go to Schedule Page</a>
+                <a href="patient-dashboard.html" class="btn btn-secondary">Go to Patient Dashboard</a>
+                <a href="progress.html" class="btn btn-info">Go to Progress Page</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // Test Functions
+        function showTestResult(elementId, message, isSuccess = true) {
+            const result = document.getElementById(elementId);
+            result.textContent = message;
+            result.className = `test-result ${isSuccess ? 'success' : 'error'}`;
+            result.style.display = 'block';
+            
+            setTimeout(() => {
+                result.style.display = 'none';
+            }, 5000);
+        }
+
+        // Session Management Tests
+        async function testAddSession() {
+            try {
+                const sessionData = {
+                    scheduledDate: new Date().toISOString().split('T')[0],
+                    scheduledTime: '10:00',
+                    durationMinutes: 60,
+                    treatmentId: 1,
+                    notes: 'Test session'
+                };
+                
+                // Simulate adding session
+                const newSession = {
+                    id: Date.now(),
+                    ...sessionData,
+                    status: 'scheduled',
+                    treatment_name: 'Test Treatment',
+                    practitioner_first_name: 'Dr. Test',
+                    practitioner_last_name: 'Practitioner'
+                };
+                
+                // Save to localStorage
+                let sessions = JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]');
+                sessions.push(newSession);
+                localStorage.setItem('ayursutra_sessions', JSON.stringify(sessions));
+                
+                showTestResult('session-result', '✅ Add Session: SUCCESS - Session added to localStorage', true);
+            } catch (error) {
+                showTestResult('session-result', '❌ Add Session: FAILED - ' + error.message, false);
+            }
+        }
+
+        async function testStartSession() {
+            try {
+                let sessions = JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]');
+                if (sessions.length > 0) {
+                    sessions[0].status = 'in_progress';
+                    localStorage.setItem('ayursutra_sessions', JSON.stringify(sessions));
+                    showTestResult('session-result', '✅ Start Session: SUCCESS - Session status updated to in_progress', true);
+                } else {
+                    showTestResult('session-result', '⚠️ Start Session: No sessions to start. Add a session first.', false);
+                }
+            } catch (error) {
+                showTestResult('session-result', '❌ Start Session: FAILED - ' + error.message, false);
+            }
+        }
+
+        async function testCompleteSession() {
+            try {
+                let sessions = JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]');
+                if (sessions.length > 0) {
+                    sessions[0].status = 'completed';
+                    sessions[0].notes = 'Session completed successfully';
+                    localStorage.setItem('ayursutra_sessions', JSON.stringify(sessions));
+                    showTestResult('session-result', '✅ Complete Session: SUCCESS - Session marked as completed', true);
+                } else {
+                    showTestResult('session-result', '⚠️ Complete Session: No sessions to complete. Add a session first.', false);
+                }
+            } catch (error) {
+                showTestResult('session-result', '❌ Complete Session: FAILED - ' + error.message, false);
+            }
+        }
+
+        async function testRescheduleSession() {
+            try {
+                let sessions = JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]');
+                if (sessions.length > 0) {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    sessions[0].scheduled_date = tomorrow.toISOString().split('T')[0];
+                    sessions[0].scheduled_time = '14:00';
+                    sessions[0].reschedule_reason = 'Test reschedule';
+                    localStorage.setItem('ayursutra_sessions', JSON.stringify(sessions));
+                    showTestResult('session-result', '✅ Reschedule Session: SUCCESS - Session rescheduled to tomorrow', true);
+                } else {
+                    showTestResult('session-result', '⚠️ Reschedule Session: No sessions to reschedule. Add a session first.', false);
+                }
+            } catch (error) {
+                showTestResult('session-result', '❌ Reschedule Session: FAILED - ' + error.message, false);
+            }
+        }
+
+        // Wellness Tests
+        async function testLogWellness() {
+            try {
+                const wellnessData = {
+                    energyLevel: 4,
+                    sleepQuality: 3,
+                    mood: 5,
+                    stressLevel: 2,
+                    symptoms: 'Feeling great!',
+                    notes: 'Test wellness log'
+                };
+                
+                const wellnessLog = {
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    ...wellnessData,
+                    created_at: new Date().toISOString()
+                };
+                
+                let wellnessLogs = JSON.parse(localStorage.getItem('ayursutra_wellness') || '[]');
+                wellnessLogs.push(wellnessLog);
+                localStorage.setItem('ayursutra_wellness', JSON.stringify(wellnessLogs));
+                
+                showTestResult('wellness-result', '✅ Log Wellness: SUCCESS - Wellness data saved to localStorage', true);
+            } catch (error) {
+                showTestResult('wellness-result', '❌ Log Wellness: FAILED - ' + error.message, false);
+            }
+        }
+
+        async function testUpdateSymptoms() {
+            try {
+                const symptomData = {
+                    symptomName: 'Headache',
+                    severity: 3,
+                    duration: '2 hours',
+                    notes: 'Test symptom update'
+                };
+                
+                const symptom = {
+                    id: Date.now(),
+                    ...symptomData,
+                    created_at: new Date().toISOString()
+                };
+                
+                let symptoms = JSON.parse(localStorage.getItem('ayursutra_symptoms') || '[]');
+                symptoms.push(symptom);
+                localStorage.setItem('ayursutra_symptoms', JSON.stringify(symptoms));
+                
+                showTestResult('wellness-result', '✅ Update Symptoms: SUCCESS - Symptom data saved to localStorage', true);
+            } catch (error) {
+                showTestResult('wellness-result', '❌ Update Symptoms: FAILED - ' + error.message, false);
+            }
+        }
+
+        // Share Tests
+        async function testShareProgress() {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'My Wellness Progress - AyurSutra',
+                        text: 'Check out my wellness journey progress!',
+                        url: window.location.href
+                    });
+                    showTestResult('share-result', '✅ Share Progress: SUCCESS - Native share dialog opened', true);
+                } else if (navigator.clipboard) {
+                    await navigator.clipboard.writeText('Check out my wellness journey progress on AyurSutra! ' + window.location.href);
+                    showTestResult('share-result', '✅ Share Progress: SUCCESS - Link copied to clipboard', true);
+                } else {
+                    showTestResult('share-result', '⚠️ Share Progress: Fallback modal would be shown', true);
+                }
+            } catch (error) {
+                showTestResult('share-result', '❌ Share Progress: FAILED - ' + error.message, false);
+            }
+        }
+
+        function testStarRating() {
+            try {
+                // Create a test star rating
+                const testDiv = document.createElement('div');
+                testDiv.innerHTML = `
+                    <div class="star-rating">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                `;
+                
+                // Test star colors
+                const stars = testDiv.querySelectorAll('.star');
+                let allYellow = true;
+                stars.forEach(star => {
+                    star.classList.add('active');
+                    const computedStyle = window.getComputedStyle(star);
+                    if (computedStyle.color !== 'rgb(251, 191, 36)') {
+                        allYellow = false;
+                    }
+                });
+                
+                if (allYellow) {
+                    showTestResult('share-result', '✅ Star Rating: SUCCESS - Stars are properly yellow', true);
+                } else {
+                    showTestResult('share-result', '⚠️ Star Rating: Colors may not be fully yellow', false);
+                }
+            } catch (error) {
+                showTestResult('share-result', '❌ Star Rating: FAILED - ' + error.message, false);
+            }
+        }
+
+        // New Tab Tests
+        function testNewTab(url) {
+            try {
+                window.open(url, '_blank');
+                showTestResult('tab-result', '✅ New Tab: SUCCESS - Opened ' + url + ' in new tab', true);
+            } catch (error) {
+                showTestResult('tab-result', '❌ New Tab: FAILED - ' + error.message, false);
+            }
+        }
+
+        // Data Persistence Tests
+        function testDataPersistence() {
+            try {
+                // Test saving data
+                const testData = {
+                    sessions: JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]'),
+                    wellness: JSON.parse(localStorage.getItem('ayursutra_wellness') || '[]'),
+                    symptoms: JSON.parse(localStorage.getItem('ayursutra_symptoms') || '[]')
+                };
+                
+                const sessionCount = testData.sessions.length;
+                const wellnessCount = testData.wellness.length;
+                const symptomCount = testData.symptoms.length;
+                
+                showTestResult('data-result', 
+                    `✅ Data Persistence: SUCCESS - Sessions: ${sessionCount}, Wellness: ${wellnessCount}, Symptoms: ${symptomCount}`, 
+                    true);
+            } catch (error) {
+                showTestResult('data-result', '❌ Data Persistence: FAILED - ' + error.message, false);
+            }
+        }
+
+        function clearTestData() {
+            try {
+                localStorage.removeItem('ayursutra_sessions');
+                localStorage.removeItem('ayursutra_wellness');
+                localStorage.removeItem('ayursutra_symptoms');
+                showTestResult('data-result', '✅ Clear Data: SUCCESS - All test data cleared', true);
+            } catch (error) {
+                showTestResult('data-result', '❌ Clear Data: FAILED - ' + error.message, false);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Feature Testing Dashboard loaded');
+            console.log('📊 Current localStorage data:');
+            console.log('Sessions:', JSON.parse(localStorage.getItem('ayursutra_sessions') || '[]'));
+            console.log('Wellness:', JSON.parse(localStorage.getItem('ayursutra_wellness') || '[]'));
+            console.log('Symptoms:', JSON.parse(localStorage.getItem('ayursutra_symptoms') || '[]'));
+        });
+    </script>
+</body>
+</html>

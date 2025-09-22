@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - AyurSutra</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container container-xl">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>AyurSutra</h1>
+                    <p>Panchakarma Care</p>
+                </div>
+            </a>
+            <ul class="nav-menu" id="mobile-menu">
+                <li><a href="index.html" class="nav-item">Home</a></li>
+                <li><a href="patient-dashboard.html" class="nav-item">Patient Dashboard</a></li>
+                <li><a href="practitioner-dashboard.html" class="nav-item">Practitioner Dashboard</a></li>
+                <li><a href="schedule.html" class="nav-item">Schedule</a></li>
+                <li><a href="progress.html" class="nav-item">Progress</a></li>
+                <li><a href="notifications.html" class="nav-item active">Notifications</a></li>
+                <li><a href="feedback.html" class="nav-item">Feedback</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container" style="max-width: 64rem;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Notifications</h1>
+                <p class="dashboard-subtitle">Stay updated with your wellness journey</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="card notification-item notification-unread" id="notification-1" data-type="reminder">
+                    <div class="card-content p-6">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Upcoming Session Reminder</h3>
+                            <div class="badge badge-warning">high</div>
+                        </div>
+                        <p class="notification-message">Your Abhyanga session is scheduled for tomorrow at 10:00 AM with Dr. Priya Sharma</p>
+                        <div class="notification-meta">
+                            <span>2 hours ago</span>
+                            <span>reminder</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card notification-item" id="notification-2" data-type="precaution">
+                    <div class="card-content p-6">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Pre-procedure Guidelines</h3>
+                            <div class="badge" style="background-color: var(--secondary); color: var(--secondary-foreground);">medium</div>
+                        </div>
+                        <p class="notification-message">Please follow dietary restrictions: Avoid heavy meals 2 hours before your Shirodhara session</p>
+                        <div class="notification-meta">
+                            <span>4 hours ago</span>
+                            <span>precaution</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
